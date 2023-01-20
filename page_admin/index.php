@@ -1,11 +1,12 @@
 <?php
 session_start();
-if(!isset($_SESSION['user'])) :
-  header("Location: ../index.php");
+if(!isset($_SESSION["masuk"])) :
+  header("Location: ./login.php");
   exit();
 endif;
+
 $page = "PUTR";
-include './include/heading.php';
+include 'include/heading.php';
 
 $count_user = "SELECT COUNT(*) AS count FROM user";
 $count_reservasi = "SELECT COUNT(*) AS count FROM reservasi";

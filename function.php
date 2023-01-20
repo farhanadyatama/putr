@@ -1,6 +1,6 @@
 <?php
 
-require '../connection.php';
+require 'connection.php';
 
 // function add_level($data) {
 //   global $pdo;
@@ -12,6 +12,29 @@ require '../connection.php';
 //   $stmt->execute([':user_level' => $level]);
 //   return $stmt->rowCount();
 // }
+
+function registrasi($data) {
+  global $conn;
+
+  $name = strtolower(stripslashes($data["name2"]));
+  $email = $_POST["email"];
+  $password = mysqli_real_escape_string($conn, $data["password2"]);
+
+  // cek name 
+ $result = mysqli_query($conn, "SELECT name FROM user WHERE name = '$name'");
+ if(mysqli_fetch_assoc($result)) {
+   echo "<script>alert('name sudah terdaftar')</script>";
+   return false;
+ }
+
+  // enkripsi password
+  $password = password_hash($password, PASSWORD_DEFAULT);
+
+  // tambahkan userbaru ke db
+  mysqli_query($conn, "INSERT INTO user VALUES('', '$name', '$email', '$password', '')");
+
+  return mysqli_affected_rows($conn);
+}
 
 function add_user($data) {
   global $pdo;

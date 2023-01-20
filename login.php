@@ -1,11 +1,19 @@
 <?php
-require "connection.php";
+session_start();
+
+if(isset($_SESSION["masuk"])) {
+  header("Location: page_admin/index.php");
+  exit;
+}
+
+// require "connection.php";
+require 'function.php';
 
 if(isset($_POST["masuk"])) {
-  $name = $_POST["name"];
-  $password = $_POST["password"];
+  // $name = $_POST["name"];
+  // $password = $_POST["password"];
 
-  $result = mysqli_query($conn, "SELECT * FROM user WHERE name = '$name' AND password = '$password'");
+  // $result = mysqli_query($conn, "SELECT * FROM user WHERE name = '$name' AND password = '$password'");
 
   // cek name
   // if(mysqli_num_rows($result) === 1) {
@@ -17,24 +25,53 @@ if(isset($_POST["masuk"])) {
   //   }
   // }
 
-  session_start();
-  $_SESSION['user'] = $result;
-  $_SESSION['name'] = $_POST['name'];
-  header("Location: page_admin/index.php");
+  // session_start();
+  // $_SESSION['user'] = $result;
+  // $_SESSION['name'] = $_POST['name'];
+  // header("Location: page_admin/index.php");
+
+  // $error = true;
+
+  $name = $_POST["name"];
+  $password = $_POST["password"];
+
+  $result = mysqli_query($conn, "SELECT * FROM user WHERE name = '$name'");
+
+  // cek username 
+  if (mysqli_num_rows($result) === 1) {
+    // cek password
+    $row = mysqli_fetch_assoc($result);
+    if(password_verify($password, $row["password"])) {
+      // set session 
+      $_SESSION['masuk'] = true;
+
+      $_SESSION['user'] = $result;
+      $_SESSION['name'] = $_POST['name'];
+
+      header("Location: page_admin/index.php");
+      exit;
+    }
+  }
 
   $error = true;
 }
 
 if(isset($_POST["daftar"])) {
-  $name = $_POST["name2"];
-  $email = $_POST["email"];
-  $password = $_POST["password2"];
+  // $name = $_POST["name2"];
+  // $email = $_POST["email"];
+  // $password = $_POST["password2"];
 
-  $result = mysqli_query($conn, "INSERT INTO user VALUES ('', '$name', '$email', '$password', '')");
+  // $result = mysqli_query($conn, "INSERT INTO user VALUES ('', '$name', '$email', '$password', '')");
 
-  header("Location: login.php");
+  // header("Location: login.php");
 
-  $error = true;
+  // $error = true;
+
+  if(registrasi($_POST) > 0) {
+    header("Location: login.php");
+  } else {
+    echo mysqli_error($conn);
+  }
 }
 
 ?>
@@ -70,6 +107,11 @@ if(isset($_POST["daftar"])) {
           <div class="form-content">
             <div class="login-form">
               <div class="title">Login</div>
+
+              <?php if(isset($error) ) : ?>
+                <p style="color: red; font-style: italic">nama / password salah</p>
+              <?php endif; ?>
+
             <form action="" method="post">
               <div class="input-boxes">
                 <div class="input-box">
@@ -89,7 +131,7 @@ if(isset($_POST["daftar"])) {
           </form>
         </div>
 
-          <div class="signup-form">
+          <div class="signup-form" id="signup-form">
             <div class="title">Daftar</div>
           <form action="" method="post">
               <div class="input-boxes">

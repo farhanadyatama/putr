@@ -1,10 +1,10 @@
 <?php
 // session_start();
 
-require './function.php';
+// require '././function.php';
 
 // Mengecek user sudah login atau belum, dengan memeriksa session-nya
-if(!isset($_SESSION['user'])) {
+if(!isset($_SESSION['masuk'])) {
   header('Location: index.php');
 }
 
