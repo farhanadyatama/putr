@@ -1,6 +1,6 @@
 <?php
 
-require './function.php';
+require '../function.php';
 
 if(isset($_GET["id-information"])) :
     if (delete_informasi($_GET) > 0) :

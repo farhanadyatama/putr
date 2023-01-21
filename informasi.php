@@ -20,10 +20,12 @@ global $pdo;
                     <th>Download</th>
                   </tr>
                 </thead>
+
                 <?php $i = 1;
                 $result = $pdo->query("SELECT * FROM
                 information"); 
                 foreach ($result as $row) :?>
+                
                 <tbody>
                   <tr>
                     <td><?= $i++ ?></td>

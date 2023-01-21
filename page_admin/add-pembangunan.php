@@ -2,6 +2,8 @@
 session_start();
 $session = $_SESSION['user'];
 
+include '../function.php';
+
 $page = "Tambah Data Pembangunan";
 include './include/heading.php';
 

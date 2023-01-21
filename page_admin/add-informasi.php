@@ -2,6 +2,8 @@
 session_start();
 $session = $_SESSION['user'];
 
+include '../function.php';
+
 $page = "Tambah Dokumen / Informasi";
 include './include/heading.php';
 

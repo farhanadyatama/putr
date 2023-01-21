@@ -1,6 +1,6 @@
 <?php
 
-require './function.php';
+require '../function.php';
 
 if(isset($_GET["id-reservasi"])) :
     if (delete_reservasi($_GET) > 0) :

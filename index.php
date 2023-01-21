@@ -154,7 +154,7 @@ include './include/header.php';
       </div>
     </section><!-- End Contact Section -->
 
-  </main><!-- End #main -->
+  </main><!-- End main -->
 
 <?php
 include './include/footer.php';

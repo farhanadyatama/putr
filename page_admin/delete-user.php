@@ -1,7 +1,7 @@
 <?php
 
 include '../connection.php';
-include 'function.php';
+include '../function.php';
 
 if(isset($_GET["id-login"])) :
     if (delete_user($_GET) > 0) :

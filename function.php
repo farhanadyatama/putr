@@ -2,17 +2,6 @@
 
 require 'connection.php';
 
-// function add_level($data) {
-//   global $pdo;
-
-//   $level = htmlspecialchars($data["user-level"]);
-
-//   $stmt = $pdo->prepare('INSERT INTO tbl_level (user_level) VALUES (:user_level)');
-  
-//   $stmt->execute([':user_level' => $level]);
-//   return $stmt->rowCount();
-// }
-
 function registrasi($data) {
   global $conn;
 
@@ -23,9 +12,16 @@ function registrasi($data) {
   // cek name 
  $result = mysqli_query($conn, "SELECT name FROM user WHERE name = '$name'");
  if(mysqli_fetch_assoc($result)) {
-   echo "<script>alert('name sudah terdaftar')</script>";
+   echo "<script>alert('nama pengguna sudah terdaftar')</script>";
    return false;
  }
+
+ // password
+//  $hasil = mysqli_query($conn, "SELECT password FROM user WHERE password = '$password'");
+//  if(mysqli_fetch_assoc($hasil) <= 8) {
+//    echo "<script>alert('Kata sandi harus 8 karakter atau lebih.')</script>";
+//    return false;
+//  }
 
   // enkripsi password
   $password = password_hash($password, PASSWORD_DEFAULT);
@@ -101,7 +97,7 @@ function add_user($data) {
         if(strlen($password) >= 8) :
           if($password == $re_password) :
             // Encrypt password with password_hash()
-            $password_hash = password_hash($password, PASSWORD_DEFAULT);
+            $password = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare('INSERT INTO
               user (name, email, password, photo)
               VALUES (:name, :email, :password, :photo)');
@@ -124,17 +120,17 @@ function add_user($data) {
           else :
             $errMSG = "Konfirmasi kata sandi tidak sama!";
             setcookie("fail", $errMSG, time()+5);
-            header("Location: ./data-user.php");
+            header("Location: ./add-user.php");
           endif;
         else :
           $errMSG = "Kata sandi harus 8 karakter atau lebih.";
           setcookie("fail", $errMSG, time()+5);
-          header("Location: ./data-user.php");
+          header("Location: ./add-user.php");
         endif;
       else :
         $errMSG = "Nama pengguna sudah digunakan.";
         setcookie("fail", $errMSG, time()+5);
-        header("Location: ./data-user.php");
+        header("Location: ./add-user.php");
       endif;
     endif;
   endif;
@@ -351,72 +347,9 @@ function add_informasi($data) {
   $lampiran = $_FILES['filesName']['name'];
   move_uploaded_file($_FILES['filesName']['tmp_name'], $direktori . $lampiran);
 
-  // // get upload image info
-  // $imgName = $_FILES['photo']['name'];
-  // /* $tmpDir should define first in file /etc/php/7.4/apache2/php.ini
-  //  * in line upload_tmp_dir = /var/www/tmp_upload
-  //  * and tmp_upload folder should created and change the permission
-  //  * even the user owner
-  //  */
-  // $tmpDir = $_FILES['photo']['tmp_name'];
-  // $imgSize = $_FILES['photo']['size'];
-
-  // // execute if input type file is not empty
-  // if($imgName) :
-  //   // prepare image for uploading
-  //   $imgExt = strtolower(pathinfo($imgName, PATHINFO_EXTENSION));
-  //   $allowedExt = ['png', 'jpg'];
-  //   $uploadDir = '../images/kuliner/';
-  //   $imgUploadName = 'kuliner_'.time().".".$imgExt; // Sample output : news_1647141687.jpg
-
-  //   // execute if allowed file extension is match
-  //   if(in_array($imgExt, $allowedExt)) :
-  //     // execute if file size less than 1MB
-  //     if($imgSize < 1044070) :
-  //       move_uploaded_file($tmpDir, $uploadDir.$imgUploadName);
-  //     else :
-  //       $errMSG = "Ukuran file lebih dari 1MB.";
-  //       setcookie("fail", $errMSG, time()+5);
-  //       header("Location: ".$_SERVER['PHP_SELF']);
-  //     endif;
-  //   else :
-  //     $errMSG = "Hanya file JPG dan PNG yang bisa diunggah.";
-  //     setcookie("fail", $errMSG, time()+5);
-  //     /* $_SERVER['PHP_SELF'] will goes to the wrong place
-  //      * if htaccess url manipulation is in play the value
-  //      */
-  //     header("Location: ".$_SERVER['PHP_SELF']);
-  //   endif;
-  // else :
-  //   $imgUploadName = NULL;
-  // endif;
-
   if(!isset($errMSG)) :
     // execute if title is not empty
     if($nama_dokumen_file) :
-      // fetch title from database
-      // $stmt = $pdo->prepare('SELECT title FROM tbl_news');
-      // $stmt->execute();
-      // $result = $stmt->fetchAll();
-
-      // $rows = [];
-      // foreach ($result as $row) :
-      //   $rows[] = $row['title'];
-      // endforeach;
-
-      // if(!in_array($title, $rows)) :
-        // if(!empty($date)) :
-        //   $stmt = $pdo->prepare('INSERT INTO
-        //     tbl_news (title, text_content, user, date, photo_news)
-        //     VALUES (:title, :text_content, :user, :date, :photo_news)');
-        //   $params = [
-        //     ':title' => $title,
-        //     ':text_content' => $text_content,
-        //     ':user' => $author,
-        //     ':date' => $date,
-        //     ':photo_news' => $imgUploadName
-        //   ];
-        // else :
           $stmt = $pdo->prepare('INSERT INTO
             information (nama_dokumen_file, file)
             VALUES (:nama_dokumen_file, :file)');
@@ -424,7 +357,6 @@ function add_informasi($data) {
             ':nama_dokumen_file' => $nama_dokumen_file,
             ':file' => $lampiran
           ];
-        // endif;
 
         if($stmt->execute($params)) : 
           $successMSG = "Data informasi berhasil ditambahkan!";

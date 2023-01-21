@@ -2,6 +2,8 @@
 session_start();
 $session = $_SESSION['user'];
 
+include '../function.php';
+
 $page = "Detail Data Pengguna";
 include './include/heading.php';
 
@@ -80,20 +82,27 @@ if (isset($_POST['edit_user'])) :
   $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
   $re_password = filter_input(INPUT_POST, 're-password', FILTER_SANITIZE_STRING);
 
-  // if(!empty($re_password)) :
-  //   if($password == $re_password) :
-  //     // Encrypt password with password_hash()
-  //     $password_hash = password_hash($password, PASSWORD_DEFAULT);
-  //   else :
-  //     $errMSG = "Konfirmasi kata sandi tidak sesuai.";
-  //     setcookie("user_fail", $errMSG, time()+5);
-  //     header("Location: ".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']);
-  //   endif;
-  // else :
-  //   $errMSG = "Konfirmasi kata sandi kosong.";
-  //   setcookie("user_fail", $errMSG, time()+5);
-  //   header("Location: ".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']);
-  // endif;
+
+  if(strlen($password) >= 8) :
+    if(!empty($re_password)) :
+      if($password == $re_password) :
+        // Encrypt password with password_hash()
+        $password = password_hash($password, PASSWORD_DEFAULT);
+      else :
+        $errMSG = "Konfirmasi kata sandi tidak sama.";
+        setcookie("user_fail", $errMSG, time()+5);
+        header("Location: ".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']);
+      endif;
+      else :
+        $errMSG = "Konfirmasi kata sandi kosong.";
+        setcookie("user_fail", $errMSG, time()+5);
+        header("Location: ".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']);
+      endif;
+  else :
+    $errMSG = "Kata sandi harus 8 karakter atau lebih.";
+    setcookie("user_fail", $errMSG, time()+5);
+    header("Location: ".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']);
+  endif;
 
   if(!isset($errMSG)) :
     $stmt = $pdo->prepare('UPDATE user SET name = :name, email = :email,

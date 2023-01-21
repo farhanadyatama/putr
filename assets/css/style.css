@@ -808,10 +808,6 @@ section {
   /*--------------------------------------------------------------
   # Table 
   --------------------------------------------------------------*/
-  /* table, th, td {
-    border: 1px solid black;
-  } */
-
   table th button {
     background-color: #2487ce; /* Green */
     border: none;

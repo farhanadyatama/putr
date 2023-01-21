@@ -6,32 +6,9 @@ if(isset($_SESSION["masuk"])) {
   exit;
 }
 
-// require "connection.php";
 require 'function.php';
 
 if(isset($_POST["masuk"])) {
-  // $name = $_POST["name"];
-  // $password = $_POST["password"];
-
-  // $result = mysqli_query($conn, "SELECT * FROM user WHERE name = '$name' AND password = '$password'");
-
-  // cek name
-  // if(mysqli_num_rows($result) === 1) {
-  //   // cek password
-  //   $row = mysqli_fetch_assoc($result);
-  //   if (password_verify($password, $row["password"])) {
-  //     header("Location: page_admin/index.php");
-  //     exit;
-  //   }
-  // }
-
-  // session_start();
-  // $_SESSION['user'] = $result;
-  // $_SESSION['name'] = $_POST['name'];
-  // header("Location: page_admin/index.php");
-
-  // $error = true;
-
   $name = $_POST["name"];
   $password = $_POST["password"];
 
@@ -57,16 +34,6 @@ if(isset($_POST["masuk"])) {
 }
 
 if(isset($_POST["daftar"])) {
-  // $name = $_POST["name2"];
-  // $email = $_POST["email"];
-  // $password = $_POST["password2"];
-
-  // $result = mysqli_query($conn, "INSERT INTO user VALUES ('', '$name', '$email', '$password', '')");
-
-  // header("Location: login.php");
-
-  // $error = true;
-
   if(registrasi($_POST) > 0) {
     header("Location: login.php");
   } else {
